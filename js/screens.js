@@ -1242,27 +1242,41 @@ var App = App || {};
       App.charts.drawBarChart(canvas, chartData, { title: 'Daily Profit Over Time', width: 700, height: 250 });
     }, 50);
 
+    screen.appendChild(el('h2', { className: 'mt-32' }, 'Days of Operation'));
+    var opsTable = el('table', { className: 'data-table' });
+    var opsHead = el('thead');
+    var opsHeaderRow = el('tr');
+    ['Day', 'Weather', 'Price', 'Made', 'Sold', 'Wasted', 'Revenue', 'Costs', 'Profit'].forEach(function (h) {
+      opsHeaderRow.appendChild(el('th', null, h));
+    });
+    opsHead.appendChild(opsHeaderRow);
+    opsTable.appendChild(opsHead);
+    var opsBody = el('tbody');
+    state.days.forEach(function (d, i) {
+      var wInfo = App.weather.getWeatherInfo(d.weather);
+      var row = el('tr');
+      row.appendChild(el('td', null, String(i + 1)));
+      row.appendChild(el('td', null, wInfo.icon + ' ' + wInfo.label));
+      row.appendChild(el('td', { className: 'mono' }, getUI().formatMoney(d.priceCharged)));
+      row.appendChild(el('td', null, String(d.cupsProduced)));
+      row.appendChild(el('td', null, String(d.cupsSold)));
+      row.appendChild(el('td', { className: d.wastedCups > 0 ? 'negative' : '' }, String(d.wastedCups)));
+      row.appendChild(el('td', { className: 'mono' }, getUI().formatMoney(d.revenue)));
+      row.appendChild(el('td', { className: 'mono' }, getUI().formatMoney(d.totalCost)));
+      row.appendChild(el('td', { className: 'mono ' + (d.grossProfit >= 0 ? 'positive' : 'negative') }, getUI().formatMoney(d.grossProfit)));
+      opsBody.appendChild(row);
+    });
+    opsTable.appendChild(opsBody);
+    screen.appendChild(opsTable);
+
     var btnRow = el('div', { className: 'flex-row flex-center mt-32 gap-24' });
     btnRow.appendChild(getUI().button('Start Over', 'btn-secondary btn-large', function () {
       App.state.reset();
       App.router.navigate('session-chooser');
     }));
     btnRow.appendChild(getUI().button('Try Again (Same Plan)', 'btn-primary btn-large', function () {
-      var weather = App.weather.generateWeather(state.totalDays);
-      App.state.set({
-        currentDay: 0,
-        weather: weather,
-        days: [],
-        totalRevenue: 0,
-        totalCosts: 0,
-        totalCupsSold: 0,
-        totalCupsProduced: 0,
-        totalWaste: 0,
-        cumulativeProfit: 0,
-        loan: { principal: state.loan.principal, repaid: 0, remaining: state.loan.principal },
-        currentScreen: 'morning-brief'
-      });
-      App.router.navigate('morning-brief');
+      App.state.set({ currentScreen: 'day-count' });
+      App.router.navigate('day-count');
     }));
     screen.appendChild(btnRow);
 
