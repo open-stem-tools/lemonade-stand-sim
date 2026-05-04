@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lemonade Stand — Teacher Settings</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="settings-container">
+    <h1>Teacher Settings</h1>
+    <p class="subtitle">Configure simulation parameters.</p>
+
+    <div class="settings-section">
+      <h2>Store Prices</h2>
+      <p>Adjust prices to create different difficulty levels. Defaults match the standard curriculum.</p>
+      <div class="form-group">
+        <label for="price-lemons">Lemons (2 lb bag)</label>
+        <input type="number" id="price-lemons" class="input" step="0.01" min="0" value="6.00">
+      </div>
+      <div class="form-group">
+        <label for="price-water">Drinking Water (1 gallon)</label>
+        <input type="number" id="price-water" class="input" step="0.01" min="0" value="1.50">
+      </div>
+      <div class="form-group">
+        <label for="price-sugar">Granulated Sugar (4 lb bag)</label>
+        <input type="number" id="price-sugar" class="input" step="0.01" min="0" value="3.79">
+      </div>
+      <div class="form-group">
+        <label for="price-cups">Plastic Cups (50-pack)</label>
+        <input type="number" id="price-cups" class="input" step="0.01" min="0" value="7.00">
+      </div>
+      <button class="btn btn-primary" id="save-prices" type="button">Save Prices</button>
+    </div>
+
+    <div class="settings-section">
+      <h2>Base Customers</h2>
+      <p>Number of potential customers on a typical day (before weather adjustments).</p>
+      <div class="form-group">
+        <label for="base-customers">Base Customers</label>
+        <input type="range" id="base-customers" class="slider" min="3" max="30" value="7" step="1">
+        <div class="slider-value" id="base-customers-value">7</div>
+      </div>
+      <button class="btn btn-primary" id="save-customers" type="button">Save</button>
+    </div>
+
+    <div class="settings-section">
+      <button class="btn btn-secondary" id="reset-all" type="button">Reset All to Defaults</button>
+    </div>
+
+    <div id="settings-result"></div>
+  </div>
+
+  <script>
+    var CONFIG_KEY = 'lemonade-teacher-config';
+
+    function loadSettings() {
+      var config = null;
+      try { config = JSON.parse(localStorage.getItem(CONFIG_KEY)); } catch (e) {}
+      if (config) {
+        if (config.prices) {
+          if (config.prices.lemons != null) document.getElementById('price-lemons').value = config.prices.lemons;
+          if (config.prices.water != null)  document.getElementById('price-water').value = config.prices.water;
+          if (config.prices.sugar != null)  document.getElementById('price-sugar').value = config.prices.sugar;
+          if (config.prices.cups != null)   document.getElementById('price-cups').value = config.prices.cups;
+        }
+        if (config.baseCustomers != null) {
+          document.getElementById('base-customers').value = config.baseCustomers;
+          document.getElementById('base-customers-value').textContent = config.baseCustomers;
+        }
+      }
+    }
+
+    function getConfig() {
+      var raw = localStorage.getItem(CONFIG_KEY);
+      try { return raw ? JSON.parse(raw) : {}; } catch (e) { return {}; }
+    }
+
+    function saveConfig(updates) {
+      var config = getConfig();
+      for (var k in updates) {
+        if (updates.hasOwnProperty(k)) config[k] = updates[k];
+      }
+      localStorage.setItem(CONFIG_KEY, JSON.stringify(config));
+    }
+
+    document.getElementById('save-prices').addEventListener('click', function () {
+      saveConfig({
+        prices: {
+          lemons: parseFloat(document.getElementById('price-lemons').value) || 6.00,
+          water: parseFloat(document.getElementById('price-water').value) || 1.50,
+          sugar: parseFloat(document.getElementById('price-sugar').value) || 3.79,
+          cups: parseFloat(document.getElementById('price-cups').value) || 7.00
+        }
+      });
+      showResult('settings-result', 'success', 'Prices saved. New sessions will use these prices.');
+    });
+
+    document.getElementById('base-customers').addEventListener('input', function () {
+      document.getElementById('base-customers-value').textContent = this.value;
+    });
+
+    document.getElementById('save-customers').addEventListener('click', function () {
+      saveConfig({
+        baseCustomers: parseInt(document.getElementById('base-customers').value) || 7
+      });
+      showResult('settings-result', 'success', 'Base customers saved.');
+    });
+
+    document.getElementById('reset-all').addEventListener('click', function () {
+      if (confirm('Reset all settings to defaults? This won\'t affect saved student sessions.')) {
+        localStorage.removeItem(CONFIG_KEY);
+        document.getElementById('price-lemons').value = '6.00';
+        document.getElementById('price-water').value = '1.50';
+        document.getElementById('price-sugar').value = '3.79';
+        document.getElementById('price-cups').value = '7.00';
+        document.getElementById('base-customers').value = '7';
+        document.getElementById('base-customers-value').textContent = '7';
+        showResult('settings-result', 'success', 'All settings reset to defaults.');
+      }
+    });
+
+    function showResult(containerId, type, message) {
+      var container = document.getElementById(containerId);
+      container.innerHTML = '';
+      var div = document.createElement('div');
+      div.className = 'test-result' + (type === 'success' ? ' test-success' : type === 'failure' ? ' test-failure' : '');
+      div.textContent = message;
+      container.appendChild(div);
+    }
+
+    loadSettings();
+  </script>
+</body>
+</html>

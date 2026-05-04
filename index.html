@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lemonade Stand Simulator</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div id="app">
+    <div id="progress-bar" class="progress-bar" aria-label="Progress">
+      <div class="progress-segments">
+        <div class="progress-segment" data-phase="setup">
+          <span class="progress-label">Setup</span>
+          <div class="progress-track">
+            <div class="progress-fill" id="progress-setup"></div>
+          </div>
+        </div>
+        <div class="progress-segment" data-phase="planning">
+          <span class="progress-label">Planning</span>
+          <div class="progress-track">
+            <div class="progress-fill" id="progress-planning"></div>
+          </div>
+        </div>
+        <div class="progress-segment" data-phase="simulation">
+          <span class="progress-label">Simulation</span>
+          <div class="progress-track">
+            <div class="progress-fill" id="progress-simulation"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <main id="content" class="content" role="main"></main>
+
+  </div>
+
+  <script src="js/state.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/recipe.js"></script>
+  <script src="js/finance.js"></script>
+  <script src="js/weather.js"></script>
+  <script src="js/simulation.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/screens.js"></script>
+  <script src="js/router.js"></script>
+</body>
+</html>
