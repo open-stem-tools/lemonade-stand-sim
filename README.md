@@ -2,8 +2,6 @@
 
 An educational web app that teaches business math, pricing strategy, and microeconomics through running a lemonade stand.
 
-Designed and developed for iGen Educational Academy https://igeneduacademy.com/
-
 ## Try it here:
 
 https://open-stem-tools.github.io/lemonade-stand-sim/
@@ -28,3 +26,5 @@ Teacher settings (store prices, base customer count) can be configured at `setti
 ## License
 
 MIT
+
+Designed and developed for iGen Educational Academy https://igeneduacademy.com/
