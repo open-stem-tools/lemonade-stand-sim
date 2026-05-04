@@ -4,6 +4,10 @@ An educational web app that teaches business math, pricing strategy, and microec
 
 Designed and developed for iGen Educational Academy https://igeneduacademy.com/
 
+## Try it here:
+
+https://open-stem-tools.github.io/lemonade-stand-sim/
+
 ## Topics Covered
 
 - Recipe ratios and unit conversions
@@ -20,9 +24,6 @@ Open `index.html` in any browser. No build step, no dependencies, no internet re
 
 Teacher settings (store prices, base customer count) can be configured at `settings.html`.
 
-## Live
-
-https://open-stem-tools.github.io/lemonade-stand-sim/
 
 ## License
 
