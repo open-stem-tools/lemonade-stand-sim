@@ -2,7 +2,7 @@
 
 An educational web app that teaches business math, pricing strategy, and microeconomics through running a lemonade stand.
 
-Designed for students ages 8-12.
+Designed and developed for iGen Educational Academy https://igeneduacademy.com/
 
 ## Topics Covered
 
